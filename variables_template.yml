@@ -1,0 +1,147 @@
+# ============================================================
+# Nexus 9K VPC Pair — Variables Template
+# Safe for GitHub — no sensitive values
+# Copy this file to variables.yml and fill in your values
+# ============================================================
+
+# ----------------------------------------
+# SWITCH IDENTITIES
+# ----------------------------------------
+switch1:
+  hostname: "HOSTNAME-SW1"
+  mgmt_ip: "x.x.x.x"
+  mgmt_mask: "255.255.255.0"
+  mgmt_gateway: "x.x.x.x"
+  loopback0_ip: "x.x.x.x"
+
+switch2:
+  hostname: "HOSTNAME-SW2"
+  mgmt_ip: "x.x.x.x"
+  mgmt_mask: "255.255.255.0"
+  mgmt_gateway: "x.x.x.x"
+  loopback0_ip: "x.x.x.x"
+
+# ----------------------------------------
+# DOMAIN & GLOBAL
+# ----------------------------------------
+domain_name: "your.domain.com"
+vpc_domain: 10
+admin_username: "admin"
+
+# ----------------------------------------
+# VPC PEER KEEPALIVE (uses mgmt0)
+# ----------------------------------------
+vpc_keepalive:
+  switch1_src: "x.x.x.x"
+  switch2_src: "x.x.x.x"
+  vrf: "management"
+
+# ----------------------------------------
+# PEER LINK
+# ----------------------------------------
+peer_link:
+  port_channel: 1
+  interfaces:
+    - "Ethernet1/1"
+    - "Ethernet1/2"
+
+# ----------------------------------------
+# UPLINKS TO 7K CORE (L2, all VLANs)
+# ----------------------------------------
+uplink:
+  switch1_port_channel: 10
+  switch1_interfaces:
+    - "Ethernet1/3"
+    - "Ethernet1/4"
+  switch2_port_channel: 10
+  switch2_interfaces:
+    - "Ethernet1/3"
+    - "Ethernet1/4"
+  allowed_vlans: "1-4094"
+
+# ----------------------------------------
+# VLANs — add/remove as needed
+# ----------------------------------------
+vlans:
+  - id: 10
+    name: "VLAN-NAME"
+  - id: 20
+    name: "VLAN-NAME"
+
+# ----------------------------------------
+# SVIs WITH HSRP
+# ----------------------------------------
+svis:
+  - vlan_id: 10
+    switch1_ip: "x.x.x.x/24"
+    switch2_ip: "x.x.x.x/24"
+    hsrp_vip: "x.x.x.x"
+    hsrp_group: 10
+
+# ----------------------------------------
+# FEX UNITS — add/remove as needed (max 10)
+# ----------------------------------------
+fex_units:
+  - fex_id: 101
+    description: "FEX-101-DESCRIPTION"
+    port_channel: 101
+    switch1_interface: "Ethernet1/10"
+    switch2_interface: "Ethernet1/10"
+    fex_type: "N2K-C2248TP"
+
+# ----------------------------------------
+# NTP
+# ----------------------------------------
+ntp_servers:
+  - ip: "x.x.x.x"
+    prefer: true
+  - ip: "x.x.x.x"
+    prefer: false
+ntp_source_interface: "mgmt0"
+
+# ----------------------------------------
+# SNMP
+# ----------------------------------------
+snmp:
+  community_ro: "READONLY-COMMUNITY"
+  community_rw: "READWRITE-COMMUNITY"
+  location: "DATACENTER-LOCATION"
+  contact: "netops@your.domain.com"
+  trap_host: "x.x.x.x"
+
+# ----------------------------------------
+# TACACS+
+# ----------------------------------------
+tacacs:
+  key: "TACACS-KEY-HERE"
+  servers:
+    - ip: "x.x.x.x"
+    - ip: "x.x.x.x"
+  source_interface: "mgmt0"
+  vrf: "management"
+
+# ----------------------------------------
+# LOGGING / SYSLOG
+# ----------------------------------------
+logging:
+  servers:
+    - ip: "x.x.x.x"
+    - ip: "x.x.x.x"
+  source_interface: "mgmt0"
+  level: "6"
+
+# ----------------------------------------
+# MTU / JUMBO FRAMES
+# ----------------------------------------
+mtu:
+  system: 9216
+  layer3: 9216
+
+# ----------------------------------------
+# HSRP
+# ----------------------------------------
+hsrp:
+  switch1_priority: 110
+  switch2_priority: 100
+  preempt: true
+  version: 2

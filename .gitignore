@@ -1,0 +1,16 @@
+# Sensitive files — never commit
+variables.yml
+*.cfg
+
+# Generated output
+generated_configs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Mac
+.DS_Store
